@@ -30,7 +30,7 @@ function searchMovie() {
 
   //tallennetaan API-osoite, hyödynnetään TMDB:n tarjoamaa haku APIa
   var API =
-    "http://api.themoviedb.org/3/search/movie?api_key=eef695400454d165b00de44173ce9dac&query=";
+    "https://api.themoviedb.org/3/search/movie?api_key=eef695400454d165b00de44173ce9dac&query=";
   //yhditetään API-osite ja haun arvo(t), jolloin voimme tehdä palauttaa oikean arvon
   var call = API + searchApi;
 
@@ -112,7 +112,7 @@ function getMore() {
 
   //tallennetaan API-osoite, hyödynnetään TMDB:n tarjoamaa haku APIa
   var API =
-    "http://api.themoviedb.org/3/search/movie?api_key=eef695400454d165b00de44173ce9dac&query=";
+    "https://api.themoviedb.org/3/search/movie?api_key=eef695400454d165b00de44173ce9dac&query=";
   //yhditetään API-osite ja haun arvo(t), jolloin voimme tehdä palauttaa oikean arvon
   var call = API + searchApi + "&page=" + (clicked + 1);
 
