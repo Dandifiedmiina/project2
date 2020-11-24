@@ -30,7 +30,7 @@ function searchMovie() {
 
   //tallennetaan API-osoite, hyödynnetään TMDB:n tarjoamaa haku APIa
   var API =
-    "http://api.themoviedb.org/3/search/movie?api_key=eef695400454d165b00de44173ce9dac&query=";
+    "https://api.themoviedb.org/3/search/movie?api_key=eef695400454d165b00de44173ce9dac&query=";
   //yhditetään API-osite ja haun arvo(t), jolloin voimme tehdä palauttaa oikean arvon
   var call = API + searchApi;
 
@@ -112,7 +112,7 @@ function getMore() {
 
   //tallennetaan API-osoite, hyödynnetään TMDB:n tarjoamaa haku APIa
   var API =
-    "http://api.themoviedb.org/3/search/movie?api_key=eef695400454d165b00de44173ce9dac&query=";
+    "https://api.themoviedb.org/3/search/movie?api_key=eef695400454d165b00de44173ce9dac&query=";
   //yhditetään API-osite ja haun arvo(t), jolloin voimme tehdä palauttaa oikean arvon
   var call = API + searchApi + "&page=" + (clicked + 1);
 
@@ -134,9 +134,3 @@ function getMore() {
     }
   };
 }
-
-// Film locations https://imdb8.p.rapidapi.com/title/get-filming-locations"
-
-// API KEY FOR PICTURE https://api.themoviedb.org/3/movie/{movie_id}/images?api_key=<<api_key>>&language=en-US
-//API KEY FOR COUNTRIES https://api.themoviedb.org/3/configuration/countries?api_key=eef695400454d165b00de44173ce9dac
-// API KEY FOR SEARCH https://api.themoviedb.org/3/search/movie?api_key=eef695400454d165b00de44173ce9dac&query=Jack+Reacher &page=1
