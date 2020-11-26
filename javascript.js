@@ -7,6 +7,8 @@ var searchSplit;
 var searchApi;
 var titleApi;
 var myloc;
+var myObj;
+var pages;
 //asetetaan arvo 0 (get more funktion) klikkauksille
 //määrä kertoo monesko sivu haetaan API:n tuloksista
 var clicked = 0;
@@ -56,12 +58,12 @@ function searchMovie() {
       var jsonS = xmlhttp.responseText;
       //muutetaan objekteiksi
       var myObj = JSON.parse(jsonS);
+      pages = myObj.total_pages;
       //hakutulosten määrä kokonaisuudessaan, lisätään verkkosivuille
       document.getElementById("results").innerHTML =
-        "Total results: " + myObj.total_results;
+        "Total results with search word: " + myObj.total_results;
 
-      document.getElementById("getmore").value =
-        "Get More! Pages: 1/" + myObj.total_pages;
+      document.getElementById("getmore").value = "Get More! Pages: 1/" + pages;
       //kutsutaan funktiota parseData
       parseData(myObj);
     }
@@ -143,7 +145,7 @@ function getMore() {
   searchApi = searchSplit[0];
 
   document.getElementById("getmore").value =
-    "Get More! Pages: " + clicked + "/" + myObj.total_pages;
+    "Get More! Pages: " + (clicked + 1) + "/" + pages;
 
   //käydään läpi loopilla loput sanat
   for (i = 1; i < searchSplit.length; i++) {
@@ -165,7 +167,7 @@ function getMore() {
       //käsitellään vastaus
       var jsonS = xmlhttp.responseText;
       //muutetaan objekteiksi
-      var myObj = JSON.parse(jsonS);
+      myObj = JSON.parse(jsonS);
       //kutsutaan funktiota parseData
       parseData(myObj);
     }
