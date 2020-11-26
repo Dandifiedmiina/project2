@@ -11,12 +11,18 @@ var myloc;
 //määrä kertoo monesko sivu haetaan API:n tuloksista
 var clicked = 0;
 
+//haetaan arvo jonka käyttäjä syöttää
+var after = 2020;
+
 //search näppäimen funktio
 function searchMovie() {
   //poistetaan mahdolliset vanhat haut
   document.getElementById("movies").innerHTML = "";
   //haetaan syötetty arvo
   var search = document.getElementById("insertMovie").value;
+
+  //haetaan syötetty vuosi
+  after = document.getElementById("after").value;
   //lisätään alert mikäli hakusanaa ei ole täytetty
   if (search === "") {
     alert("write a search word");
@@ -71,9 +77,6 @@ function parseData(myObj) {
   var tr = table.insertRow(0);
   //luodaan solut
 
-  //luodaan muuttuja c, jota käytetään luomaan rivejä edellisten perään.
-  var c = 20 * clicked + 1;
-
   //Luodaan ensimmäinen rivi vain ensimmäisella hakukerralla
   if (clicked == 0) {
     var td1 = tr.insertCell(0);
@@ -84,28 +87,44 @@ function parseData(myObj) {
     td1.innerHTML = "MOVIE";
     //1.rivin ja 2.solun tiivistelmä
     td2.innerHTML = "PLOT";
-    //ensimmäisellä kerralla rivit alkavat alusta
-    c = 0;
   }
   //Ensimmäisen elokuvan otsikko käsitellään, uutta hakua varten
   //For loop käy läpi otsikot 2. eteenpäin
   for (i = 0; i < myObj.results.length; i++) {
-    //luodaan seuraava rivi ja solut, hyödnnetään for-looppia
-    tr = table.insertRow(c + 1); //+1 jotta otsikkorivit pysyvät ylimpänä
-    td1 = tr.insertCell(0);
-    td2 = tr.insertCell(1);
-    td3 = tr.insertCell(2);
+    var date = myObj.results[i].release_date;
 
-    //Syötetään soluihin haetut arvot otsikko+arvostelu
-    td1.innerHTML =
-      myObj.results[i].title + " " + myObj.results[i].vote_average + "/10";
+    var dateSplit = date.split("-");
 
-    //tiivistelmä
-    td2.innerHTML = myObj.results[i].overview;
-    //IMDB:stä saadut tiedot
-    td3.innerHTML = "Release date: " + myObj.results[i].release_date;
-    //lisätään muuttujaan +1 aina for lauseen päätyttyå
-    c = c + 1;
+    var tableLength = document.getElementById("movies");
+    var rows = tableLength.rows.length;
+
+    if (dateSplit[0] <= after) {
+      //luodaan seuraava rivi ja solut, hyödnnetään for-looppia
+      tr = table.insertRow(rows);
+      td1 = tr.insertCell(0);
+      td2 = tr.insertCell(1);
+      td3 = tr.insertCell(2);
+
+      //Syötetään soluihin haetut arvot otsikko+arvostelu
+      td1.innerHTML =
+        myObj.results[i].title + " " + myObj.results[i].vote_average + "/10";
+
+      //tiivistelmä
+      td2.innerHTML = myObj.results[i].overview;
+      //IMDB:stä saadut tiedot
+      td3.innerHTML = "Release date: " + myObj.results[i].release_date;
+    }
+
+    //mikäli ensimmäiselle sivulle ei tule tuloksia:
+    if (rows == 1) {
+      tr = table.insertRow(rows);
+      td1 = tr.insertCell(0);
+      td2 = tr.insertCell(1);
+      td3 = tr.insertCell(2);
+
+      td2.innerHTML =
+        "Most popular titles didn´t match your search. Try searching for more or change your search parameters ";
+    }
   }
 }
 
@@ -139,9 +158,6 @@ function getMore() {
       var jsonS = xmlhttp.responseText;
       //muutetaan objekteiksi
       var myObj = JSON.parse(jsonS);
-      //hakutulosten määrä kokonaisuudessaan, lisätään verkkosivuille
-      document.getElementById("results").innerHTML =
-        "Total results: " + myObj.total_results;
       //kutsutaan funktiota parseData
       parseData(myObj);
     }
