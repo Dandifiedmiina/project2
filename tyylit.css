@@ -17,7 +17,7 @@ table {
   table-layout: fixed;
   width: 100%;
 }
-tr,
+
 td {
   border: solid 1px black;
 }
