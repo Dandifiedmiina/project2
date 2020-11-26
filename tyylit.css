@@ -1,3 +1,9 @@
+h1 {
+  font-size: 25px;
+  color: navy;
+  padding: 20px;
+}
+
 #hidden {
   visibility: hidden;
   background: #f8f8ff;
