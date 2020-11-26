@@ -59,6 +59,9 @@ function searchMovie() {
       //hakutulosten määrä kokonaisuudessaan, lisätään verkkosivuille
       document.getElementById("results").innerHTML =
         "Total results: " + myObj.total_results;
+
+      document.getElementById("getmore").value =
+        "Get More! Pages: 1/" + myObj.total_pages;
       //kutsutaan funktiota parseData
       parseData(myObj);
     }
@@ -93,14 +96,15 @@ function parseData(myObj) {
   for (i = 0; i < myObj.results.length; i++) {
     var date = myObj.results[i].release_date;
 
+    //hajotetaan haetun API:n arvo päivämäärälle
     var dateSplit = date.split("-");
-
+    //tallennetaan rivien määrä muuttujaan
     var tableLength = document.getElementById("movies");
     var rows = tableLength.rows.length;
 
     if (dateSplit[0] <= after) {
       //luodaan seuraava rivi ja solut, hyödnnetään for-looppia
-      tr = table.insertRow(rows);
+      tr = table.insertRow(rows); //aina viimesen rivin  jälkeen luodaan uusin
       td1 = tr.insertCell(0);
       td2 = tr.insertCell(1);
       td3 = tr.insertCell(2);
@@ -116,7 +120,7 @@ function parseData(myObj) {
     }
 
     //mikäli ensimmäiselle sivulle ei tule tuloksia:
-    if (rows == 1) {
+    if (tableLength.rows.length == 1) {
       tr = table.insertRow(rows);
       td1 = tr.insertCell(0);
       td2 = tr.insertCell(1);
@@ -137,6 +141,10 @@ function getMore() {
   searchSplit = search.split(" ");
   //lisätään ensimmäinen sana
   searchApi = searchSplit[0];
+
+  document.getElementById("getmore").value =
+    "Get More! Pages: " + clicked + "/" + myObj.total_pages;
+
   //käydään läpi loopilla loput sanat
   for (i = 1; i < searchSplit.length; i++) {
     searchApi += "+" + searchSplit[i];
