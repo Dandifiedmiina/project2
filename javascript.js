@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 //lisätään event listeners napeille
-=======
-//lisätään event listeners
->>>>>>> 734af9fc6306607e4f77c540e3cc930d529daf8c
 document.getElementById("search").addEventListener("click", searchMovie);
 document.getElementById("getmore").addEventListener("click", getMore);
 
@@ -155,11 +151,7 @@ function parseData(myObj) {
       td2.innerHTML = "End of results";
     }
 
-<<<<<<< HEAD
     //jos ei tule tuloksia niin lisäohjeet, pidetään taulukon muoto joten luodaan myös solut ja rivi
-=======
-    //jos ei tule tuloksia niin lisäohjeet
->>>>>>> 734af9fc6306607e4f77c540e3cc930d529daf8c
     if (tableLength.rows.length == 1) {
       tr = table.insertRow(rows);
       td1 = tr.insertCell(0);
@@ -187,10 +179,7 @@ function getMore() {
     searchApi += "+" + searchSplit[i];
   }
 
-<<<<<<< HEAD
   //tehdään napille uusi siältö missä sivujen määrä
-=======
->>>>>>> 734af9fc6306607e4f77c540e3cc930d529daf8c
   document.getElementById("getmore").value =
     "Get More! Pages: " + (clicked + 1) + "/" + pages;
 
@@ -213,11 +202,8 @@ function getMore() {
       //kutsutaan funktiota parseData
       parseData(myObj);
     }
-  };
-<<<<<<< HEAD
+  }
   //jos sivut loppuvat niin ilmoitus käyttäjälle
-=======
->>>>>>> 734af9fc6306607e4f77c540e3cc930d529daf8c
   if (clicked == pages) {
     alert("End of results");
   }
