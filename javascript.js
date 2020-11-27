@@ -6,9 +6,8 @@ document.getElementById("getmore").addEventListener("click", getMore);
 var searchSplit;
 var searchApi;
 var titleApi;
-var myloc;
-var myObj;
 var pages;
+var results;
 //asetetaan arvo 0 (get more funktion) klikkauksille
 //määrä kertoo monesko sivu haetaan API:n tuloksista
 var clicked = 0;
@@ -59,6 +58,7 @@ function searchMovie() {
       //muutetaan objekteiksi
       var myObj = JSON.parse(jsonS);
       pages = myObj.total_pages;
+      results = myObj.total_results;
       //hakutulosten määrä kokonaisuudessaan, lisätään verkkosivuille
       document.getElementById("results").innerHTML =
         "Total results with search word: " + myObj.total_results;
@@ -97,19 +97,16 @@ function parseData(myObj) {
   //For loop käy läpi otsikot 2. eteenpäin
   for (i = 0; i < myObj.results.length; i++) {
     var date = myObj.results[i].release_date;
-
-    //hajotetaan haetun API:n arvo päivämäärälle
-    var dateSplit = date.split("-");
-    //tallennetaan rivien määrä muuttujaan
-    var tableLength = document.getElementById("movies");
-    var rows = tableLength.rows.length;
-
-    if (dateSplit[0] <= after) {
+    //mikäli tietoa ei saatavilla
+    if (date === undefined) {
       //luodaan seuraava rivi ja solut, hyödnnetään for-looppia
       tr = table.insertRow(rows); //aina viimesen rivin  jälkeen luodaan uusin
       td1 = tr.insertCell(0);
       td2 = tr.insertCell(1);
       td3 = tr.insertCell(2);
+
+      var tableLength = document.getElementById("movies");
+      var rows = tableLength.rows.length;
 
       //Syötetään soluihin haetut arvot otsikko+arvostelu
       td1.innerHTML =
@@ -118,10 +115,43 @@ function parseData(myObj) {
       //tiivistelmä
       td2.innerHTML = myObj.results[i].overview;
       //IMDB:stä saadut tiedot
-      td3.innerHTML = "Release date: " + myObj.results[i].release_date;
+      td3.innerHTML = "Release date: " + "Unavailable";
+    } else {
+      //hajotetaan haetun API:n arvo päivämäärälle
+      var dateSplit = date.split("-");
+      //tallennetaan rivien määrä muuttujaan
+      var tableLength = document.getElementById("movies");
+      var rows = tableLength.rows.length;
+
+      if (dateSplit[0] <= after) {
+        //luodaan seuraava rivi ja solut, hyödnnetään for-looppia
+        tr = table.insertRow(rows); //aina viimesen rivin  jälkeen luodaan uusin
+        td1 = tr.insertCell(0);
+        td2 = tr.insertCell(1);
+        td3 = tr.insertCell(2);
+
+        //Syötetään soluihin haetut arvot otsikko+arvostelu
+        td1.innerHTML =
+          myObj.results[i].title + " " + myObj.results[i].vote_average + "/10";
+
+        //tiivistelmä
+        td2.innerHTML = myObj.results[i].overview;
+        //IMDB:stä saadut tiedot
+        td3.innerHTML = "Release date: " + myObj.results[i].release_date;
+      }
     }
 
-    //mikäli ensimmäiselle sivulle ei tule tuloksia:
+    //mikäli kaikki sivut on käyty läpi
+    if (pages === clicked) {
+      tr = table.insertRow(rows);
+      td1 = tr.insertCell(0);
+      td2 = tr.insertCell(1);
+      td3 = tr.insertCell(2);
+
+      td2.innerHTML = "End of results";
+    }
+
+    //jos ei tule tuloksia niin lisäohjeet
     if (tableLength.rows.length == 1) {
       tr = table.insertRow(rows);
       td1 = tr.insertCell(0);
@@ -144,13 +174,13 @@ function getMore() {
   //lisätään ensimmäinen sana
   searchApi = searchSplit[0];
 
-  document.getElementById("getmore").value =
-    "Get More! Pages: " + (clicked + 1) + "/" + pages;
-
   //käydään läpi loopilla loput sanat
   for (i = 1; i < searchSplit.length; i++) {
     searchApi += "+" + searchSplit[i];
   }
+
+  document.getElementById("getmore").value =
+    "Get More! Pages: " + (clicked + 1) + "/" + pages;
 
   //tallennetaan API-osoite, hyödynnetään TMDB:n tarjoamaa haku APIa
   var API =
@@ -172,4 +202,7 @@ function getMore() {
       parseData(myObj);
     }
   };
+  if (clicked == pages) {
+    alert("End of results");
+  }
 }
